@@ -9,17 +9,18 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ru.yandex.practicum.sleeptracker.data.Variables.FORMATTER;
 
 public class SleepLogParser {
 
-
     public List<SleepingSession> parse(Path path) throws IOException {
-        return Files.lines(path)
-                .filter(line -> !line.isBlank())
-                .map(this::parseLine)
-                .collect(Collectors.toList());
+        try (Stream<String> lines = Files.lines(path)) {
+            return lines.filter(line -> !line.isBlank())
+                    .map(this::parseLine)
+                    .collect(Collectors.toList());
+        }
     }
 
     private SleepingSession parseLine(String line) {

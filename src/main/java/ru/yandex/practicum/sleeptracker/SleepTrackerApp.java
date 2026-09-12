@@ -1,7 +1,7 @@
 package ru.yandex.practicum.sleeptracker;
 
 import ru.yandex.practicum.sleeptracker.data.SleepingSession;
-import ru.yandex.practicum.sleeptracker.functionals.*;
+import ru.yandex.practicum.sleeptracker.functions.*;
 
 import java.io.IOException;
 import java.nio.file.Path;

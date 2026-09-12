@@ -1,4 +1,4 @@
-package ru.yandex.practicum.sleeptracker.functionals;
+package ru.yandex.practicum.sleeptracker.functions;
 
 import ru.yandex.practicum.sleeptracker.data.Chronotype;
 import ru.yandex.practicum.sleeptracker.data.SleepAnalysisResult;

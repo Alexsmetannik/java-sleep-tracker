@@ -4,7 +4,8 @@ import ru.yandex.practicum.sleeptracker.data.SleepAnalysisResult;
 import ru.yandex.practicum.sleeptracker.data.SleepingSession;
 
 import java.util.List;
-import static ru.yandex.practicum.sleeptracker.data.SleepQuality.*;
+
+import static ru.yandex.practicum.sleeptracker.data.SleepQuality.BAD;
 
 public class BadQualitySessionsFunction implements SleepAnalysisFunction {
     @Override

@@ -7,12 +7,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.yandex.practicum.sleeptracker.data.Variables.FORMATTER;
+
 public class SleepLogParser {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
+
 
     public List<SleepingSession> parse(Path path) throws IOException {
         return Files.lines(path)

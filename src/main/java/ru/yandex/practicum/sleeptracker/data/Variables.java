@@ -1,8 +1,10 @@
 package ru.yandex.practicum.sleeptracker.data;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Variables {
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
     public static final LocalTime MIDDAY = LocalTime.of(12, 0);
     public static final LocalTime NIGHT_START = LocalTime.MIDNIGHT;
     public static final LocalTime NIGHT_END = LocalTime.of(6, 0);

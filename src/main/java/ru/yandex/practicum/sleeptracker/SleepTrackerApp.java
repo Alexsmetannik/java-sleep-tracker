@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+import static ru.yandex.practicum.sleeptracker.data.Variables.DEFAULT_PATH_LOG_FILE;
+
 public class SleepTrackerApp {
     private final List<SleepAnalysisFunction> functions = List.of(
             new TotalSessionsFunction(),
@@ -19,12 +21,8 @@ public class SleepTrackerApp {
     );
 
     public static void main(String[] args) {
-        if (args.length == 0) {
-            System.err.println("Необходимо указать путь к файлу лога сна");
-            return;
-        }
-
-        Path path = Path.of(args[0]);
+        String pathString = (args.length > 0) ? args[0] : DEFAULT_PATH_LOG_FILE;
+        Path path = Path.of(pathString);
         SleepTrackerApp app = new SleepTrackerApp();
         SleepLogParser parser = new SleepLogParser();
 

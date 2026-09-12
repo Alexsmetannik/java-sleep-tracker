@@ -107,9 +107,9 @@ public class SleepTrackerAppTest {
     @Test
     void sleeplessNightsReturnsOneSleepless() {
         List<SleepingSession> sessionList = List.of(
-                session("01.10.25 23:00", "02.10.25 07:00", GOOD),
-                session("02.10.25 23:00", "03.10.25 07:00", GOOD),
-                session("04.10.25 00:30", "04.10.25 07:00", GOOD));
+                session("01.10.25 23:00", "02.10.25 07:00", SleepQuality.GOOD),
+                session("02.10.25 23:00", "03.10.25 07:00", SleepQuality.GOOD),
+                session("04.10.25 23:00", "05.10.25 07:00", SleepQuality.GOOD));
         assertEquals(1L, new SleeplessNightsFunction().apply(sessionList).getValue());
     }
 

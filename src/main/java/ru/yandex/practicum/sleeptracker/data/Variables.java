@@ -12,4 +12,5 @@ public class Variables {
     public static final LocalTime OWL_WAKE_AFTER = LocalTime.of(9, 0);
     public static final LocalTime LARK_SLEEP_BEFORE = LocalTime.of(22, 0);
     public static final LocalTime LARK_WAKE_BEFORE = LocalTime.of(7, 0);
+    public static final String DEFAULT_PATH_LOG_FILE = "src/main/resources/sleep_log.txt";
 }

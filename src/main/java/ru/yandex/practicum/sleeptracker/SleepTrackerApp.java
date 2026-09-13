@@ -1,6 +1,7 @@
 package ru.yandex.practicum.sleeptracker;
 
 import ru.yandex.practicum.sleeptracker.data.SleepingSession;
+import ru.yandex.practicum.sleeptracker.exception.SleepLogParseException;
 import ru.yandex.practicum.sleeptracker.functions.*;
 
 import java.io.IOException;
@@ -34,8 +35,10 @@ public class SleepTrackerApp {
                     .map(f -> f.apply(sessions))
                     .forEach(result -> System.out.println(
                             result.getDescription() + ": " + result.getValue()));
+        } catch (SleepLogParseException e) {
+            System.out.println("Ошибка формата файла лога: " + e.getMessage());
         } catch (IOException e) {
-            System.err.println("Не удалось прочитать файл: " + e.getMessage());
+            System.out.println("Не удалось прочитать файл: " + e.getMessage());
         }
     }
 

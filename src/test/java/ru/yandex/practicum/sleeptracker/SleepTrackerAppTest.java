@@ -3,14 +3,18 @@ package ru.yandex.practicum.sleeptracker;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.sleeptracker.data.SleepQuality;
 import ru.yandex.practicum.sleeptracker.data.SleepingSession;
+import ru.yandex.practicum.sleeptracker.exception.SleepLogParseException;
 import ru.yandex.practicum.sleeptracker.functions.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static ru.yandex.practicum.sleeptracker.data.Chronotype.*;
 import static ru.yandex.practicum.sleeptracker.data.SleepQuality.*;
 import static ru.yandex.practicum.sleeptracker.data.Constants.FORMATTER;
@@ -165,5 +169,38 @@ public class SleepTrackerAppTest {
                 session("02.10.25 22:30", "03.10.25 08:00", GOOD),
                 session("03.10.25 23:30", "04.10.25 10:00", GOOD));
         assertEquals(PIGEON, new ChronotypeFunction().apply(sessionList).getValue());
+    }
+
+    @Test
+    void parserEmptyFileReturnsEmptyList() throws IOException {
+        Path tmp = Files.createTempFile("sleep", ".txt");
+        try {
+            assertEquals(List.of(), new SleepLogParser().parse(tmp));
+        } finally {
+            Files.deleteIfExists(tmp);
+        }
+    }
+
+    @Test
+    void parserSkipsBlankLines() throws IOException {
+        Path tmp = Files.createTempFile("sleep", ".txt");
+        Files.writeString(tmp, "\n\n01.10.25 23:00;02.10.25 07:00;GOOD\n\n");
+        try {
+            assertEquals(1, new SleepLogParser().parse(tmp).size());
+        } finally {
+            Files.deleteIfExists(tmp);
+        }
+    }
+
+    @Test
+    void parserBrokenLineThrowsWithLineNumber() throws IOException {
+        Path tmp = Files.createTempFile("sleep", ".txt");
+        Files.writeString(tmp, "01.10.25 23:00;02.10.25 07:00;GOOD\nбитая строка\n");
+        try {
+            SleepLogParseException ex = assertThrows(SleepLogParseException.class, () -> new SleepLogParser().parse(tmp));
+            assertTrue(ex.getMessage().contains("Строка 2"));
+        } finally {
+            Files.deleteIfExists(tmp);
+        }
     }
 }

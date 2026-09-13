@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import static ru.yandex.practicum.sleeptracker.data.Variables.DEFAULT_PATH_LOG_FILE;
+import static ru.yandex.practicum.sleeptracker.data.Constants.DEFAULT_PATH_LOG_FILE;
 
 public class SleepTrackerApp {
     private final List<SleepAnalysisFunction> functions = List.of(

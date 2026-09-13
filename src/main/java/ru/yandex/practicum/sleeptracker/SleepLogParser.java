@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ru.yandex.practicum.sleeptracker.data.Variables.FORMATTER;
+import static ru.yandex.practicum.sleeptracker.data.Constants.FORMATTER;
 
 public class SleepLogParser {
 

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static ru.yandex.practicum.sleeptracker.data.Chronotype.*;
-import static ru.yandex.practicum.sleeptracker.data.Variables.*;
+import static ru.yandex.practicum.sleeptracker.data.Constants.*;
 
 public class ChronotypeFunction implements SleepAnalysisFunction {
     @Override

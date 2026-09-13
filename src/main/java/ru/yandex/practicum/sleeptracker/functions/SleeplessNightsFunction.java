@@ -6,13 +6,13 @@ import ru.yandex.practicum.sleeptracker.data.SleepingSession;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
-import static ru.yandex.practicum.sleeptracker.data.Variables.*;
+import static ru.yandex.practicum.sleeptracker.data.Constants.*;
 
 public class SleeplessNightsFunction implements SleepAnalysisFunction {
     @Override
@@ -34,7 +34,7 @@ public class SleeplessNightsFunction implements SleepAnalysisFunction {
                 ? last.getSleepEnd().toLocalDate()
                 : last.getSleepEnd().toLocalDate().plusDays(1);
 
-        long totalNights = Period.between(firstNight, lastNight).getDays() + 1;
+        long totalNights = ChronoUnit.DAYS.between(firstNight, lastNight) + 1;
 
         Set<LocalDate> nightsWithSleep = sessions.stream()
                 .flatMap(s -> getListOfNightsWhenSleepSessionSpans(s).stream())
@@ -54,7 +54,7 @@ public class SleeplessNightsFunction implements SleepAnalysisFunction {
         LocalDate startNight = getNightDate(startSession);
         LocalDate endNight = getNightDate(endSession);
 
-        long count = Period.between(startNight, endNight).getDays() + 1;
+        long count = ChronoUnit.DAYS.between(startNight, endNight) + 1;
         if (count <= 0) {
             return List.of();
         }
@@ -66,9 +66,6 @@ public class SleeplessNightsFunction implements SleepAnalysisFunction {
 
     private LocalDate getNightDate(LocalDateTime moment) {
         LocalTime time = moment.toLocalTime();
-        if (time.isBefore(NIGHT_END)) {
-            return moment.toLocalDate();
-        }
         if (time.isBefore(MIDDAY)) {
             return moment.toLocalDate();
         }

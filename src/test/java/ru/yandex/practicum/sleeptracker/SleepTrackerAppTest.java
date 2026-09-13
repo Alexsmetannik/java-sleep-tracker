@@ -5,6 +5,7 @@ import ru.yandex.practicum.sleeptracker.data.SleepQuality;
 import ru.yandex.practicum.sleeptracker.data.SleepingSession;
 import ru.yandex.practicum.sleeptracker.functions.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +13,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.yandex.practicum.sleeptracker.data.Chronotype.*;
 import static ru.yandex.practicum.sleeptracker.data.SleepQuality.*;
-import static ru.yandex.practicum.sleeptracker.data.Variables.FORMATTER;
+import static ru.yandex.practicum.sleeptracker.data.Constants.FORMATTER;
 
 public class SleepTrackerAppTest {
     private SleepingSession session(String start, String end, SleepQuality q) {
         return new SleepingSession(LocalDateTime.parse(start, FORMATTER), LocalDateTime.parse(end, FORMATTER), q);
-    }
-
-    private List<SleepingSession> getSessionList() {
-        List<SleepingSession> sessionList = new ArrayList<>();
-        sessionList.add(session("01.10.25 22:00", "02.10.25 07:00", GOOD));
-        return sessionList;
     }
 
     @Test
@@ -114,14 +109,35 @@ public class SleepTrackerAppTest {
     }
 
     @Test
-    void sleeplessNightsSendFirstSessionAfterNoon() {
-        List<SleepingSession> sessionList = List.of(session("01.10.25 23:00", "02.10.25 07:00", GOOD));
+    void sleeplessNightsFirstSessionAfterMidnightBeforeMidday() {
+        List<SleepingSession> sessionList = List.of(
+                session("05.10.25 00:10", "05.10.25 06:20", GOOD),
+                session("05.10.25 23:00", "06.10.25 06:20", GOOD));
         assertEquals(0L, new SleeplessNightsFunction().apply(sessionList).getValue());
     }
 
     @Test
-    void sleeplessNightsSendSessionStartsBeforeMidnightAndEndsAfter() {
-        assertEquals(0L, new SleeplessNightsFunction().apply(getSessionList()).getValue());
+    void sleeplessNightsLongLogAcrossMonthBoundary() {
+        List<SleepingSession> sessionList = new ArrayList<>();
+        LocalDate date = LocalDate.of(2025, 10, 1);
+        LocalDate end = LocalDate.of(2025, 11, 5);
+        while (!date.isAfter(end)) {
+            if (!date.equals(LocalDate.of(2025, 10, 15))) {
+                LocalDateTime start = date.atTime(23, 0);
+                LocalDateTime finish = date.plusDays(1).atTime(7, 0);
+                sessionList.add(new SleepingSession(start, finish, GOOD));
+            }
+            date = date.plusDays(1);
+        }
+        assertEquals(1L, new SleeplessNightsFunction().apply(sessionList).getValue());
+    }
+
+    @Test
+    void chronotypeTieReturnsPigeon() {
+        List<SleepingSession> sessionList = List.of(
+                session("01.10.25 21:00", "02.10.25 06:00", GOOD),
+                session("02.10.25 23:30", "03.10.25 10:00", GOOD));
+        assertEquals(PIGEON, new ChronotypeFunction().apply(sessionList).getValue());
     }
 
     @Test

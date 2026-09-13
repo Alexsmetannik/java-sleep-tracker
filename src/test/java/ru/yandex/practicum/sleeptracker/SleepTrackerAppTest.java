@@ -16,8 +16,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.yandex.practicum.sleeptracker.data.Chronotype.*;
-import static ru.yandex.practicum.sleeptracker.data.SleepQuality.*;
 import static ru.yandex.practicum.sleeptracker.data.Constants.FORMATTER;
+import static ru.yandex.practicum.sleeptracker.data.SleepQuality.*;
 
 public class SleepTrackerAppTest {
     private SleepingSession session(String start, String end, SleepQuality q) {

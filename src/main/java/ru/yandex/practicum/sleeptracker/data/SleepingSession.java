@@ -1,7 +1,10 @@
 package ru.yandex.practicum.sleeptracker.data;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import static ru.yandex.practicum.sleeptracker.data.Constants.NIGHT_END;
 
 public class SleepingSession {
     private final LocalDateTime sleepStart;
@@ -39,4 +42,19 @@ public class SleepingSession {
         return "Сессия сна {" + sleepStart + " -> " + sleepEnd + ", " + quality + '}';
     }
 
+
+    public boolean overlapsNight(LocalDate night) {
+        LocalDateTime nightStart = night.atStartOfDay();
+        LocalDateTime nightEnd = night.atTime(NIGHT_END);
+        return sleepStart.isBefore(nightEnd) && sleepEnd.isAfter(nightStart);
+    }
+
+    public boolean isNightSleep() {
+        LocalDateTime nightStart = sleepStart.toLocalDate().atStartOfDay();
+        LocalDateTime nightEnd = nightStart.toLocalDate().atTime(NIGHT_END);
+        if (sleepStart.isBefore(nightEnd) && sleepEnd.isAfter(nightStart)) {
+            return true;
+        }
+        return !sleepStart.toLocalDate().equals(sleepEnd.toLocalDate());
+    }
 }

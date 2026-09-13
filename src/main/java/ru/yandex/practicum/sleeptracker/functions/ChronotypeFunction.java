@@ -4,7 +4,6 @@ import ru.yandex.practicum.sleeptracker.data.Chronotype;
 import ru.yandex.practicum.sleeptracker.data.SleepAnalysisResult;
 import ru.yandex.practicum.sleeptracker.data.SleepingSession;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +16,7 @@ public class ChronotypeFunction implements SleepAnalysisFunction {
     @Override
     public SleepAnalysisResult<Chronotype> apply(List<SleepingSession> sessions) {
         Map<Chronotype, Long> counts = sessions.stream()
-                .filter(this::isNightSleep)
+                .filter(SleepingSession::isNightSleep)
                 .map(this::getChronotype)
                 .collect(Collectors.groupingBy(c -> c, Collectors.counting()));
 
@@ -37,20 +36,9 @@ public class ChronotypeFunction implements SleepAnalysisFunction {
         return new SleepAnalysisResult<>("Хронотип пользователя", result);
     }
 
-    private boolean isNightSleep(SleepingSession session) {
-        LocalDateTime startSession = session.getSleepStart();
-        LocalDateTime endSession = session.getSleepEnd();
-        LocalDateTime nightStart = startSession.toLocalDate().atStartOfDay();
-        LocalDateTime nightEnd = nightStart.plusHours(6);
-        if (startSession.isBefore(nightEnd) && endSession.isAfter(nightStart)) {
-            return true;
-        }
-        return !startSession.toLocalDate().equals(endSession.toLocalDate());
-    }
-
     private Chronotype getChronotype(SleepingSession session) {
-        LocalTime sleepTime = session.getSleepStart().toLocalTime();
-        LocalTime wakeTime = session.getSleepEnd().toLocalTime();
+        LocalTime sleepTime = toNightScale(session.getSleepStart().toLocalTime());
+        LocalTime wakeTime = toNightScale(session.getSleepEnd().toLocalTime());
         if (sleepTime.isAfter(OWL_SLEEP_AFTER) && wakeTime.isAfter(OWL_WAKE_AFTER)) {
             return OWL;
         }
@@ -58,5 +46,9 @@ public class ChronotypeFunction implements SleepAnalysisFunction {
             return LARK;
         }
         return PIGEON;
+    }
+
+    private LocalTime toNightScale(LocalTime time) {
+        return time.isBefore(MIDDAY) ? time.plusHours(24) : time;
     }
 }

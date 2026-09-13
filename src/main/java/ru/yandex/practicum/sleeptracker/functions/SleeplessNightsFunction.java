@@ -60,7 +60,7 @@ public class SleeplessNightsFunction implements SleepAnalysisFunction {
         }
         return LongStream.range(0, count)
                 .mapToObj(startNight::plusDays)
-                .filter(night -> overlapsNight(startSession, endSession, night))
+                .filter(session::overlapsNight)
                 .collect(Collectors.toList());
     }
 
@@ -70,11 +70,5 @@ public class SleeplessNightsFunction implements SleepAnalysisFunction {
             return moment.toLocalDate();
         }
         return moment.toLocalDate().plusDays(1);
-    }
-
-    private boolean overlapsNight(LocalDateTime start, LocalDateTime end, LocalDate night) {
-        LocalDateTime nightStart = night.atStartOfDay();
-        LocalDateTime nightEnd = night.atTime(NIGHT_END);
-        return start.isBefore(nightEnd) && end.isAfter(nightStart);
     }
 }

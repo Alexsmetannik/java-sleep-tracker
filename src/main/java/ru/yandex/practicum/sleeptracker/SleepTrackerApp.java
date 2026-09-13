@@ -29,7 +29,11 @@ public class SleepTrackerApp {
 
         try {
             List<SleepingSession> sessions = parser.parse(path);
-            System.out.println("Всего сессий сна: " + sessions.size());
+
+            if (sessions.isEmpty()) {
+                System.out.println("Файл лога сна пуст!");
+                return;
+            }
 
             app.getFunctionsList().stream()
                     .map(f -> f.apply(sessions))
